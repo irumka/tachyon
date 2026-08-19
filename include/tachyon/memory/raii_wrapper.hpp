@@ -16,12 +16,12 @@ public:
     UniquePtr(const UniquePtr&) = delete;
     UniquePtr& operator=(const UniquePtr&) = delete;
 
-    UniquePtr(UniquePtr&& other) {
+    UniquePtr(UniquePtr&& other) noexcept {
         ptr_ = other.ptr_;
         other.ptr_ = nullptr;
     }
 
-    UniquePtr& operator=(UniquePtr&& other) {
+    UniquePtr& operator=(UniquePtr&& other) noexcept {
         if (this != &other) {
             delete ptr_;
             ptr_ = other.ptr_;

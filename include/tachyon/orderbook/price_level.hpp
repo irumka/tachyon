@@ -25,6 +25,8 @@ struct PriceLevel {
         }
         return false;
     }
+    bool empty() const { return orders.empty(); }
+
 
 };
 

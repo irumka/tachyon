@@ -1,9 +1,8 @@
-cmake_minimum_required(VERSION 3.20)
+file(GLOB_RECURSE TEST_SOURCES *.cpp)
 
-project(tachyon LANGUAGES CXX)
+add_executable(tachyon_tests ${TEST_SOURCES})
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+target_link_libraries(tachyon_tests PRIVATE tachyon)
 
-include(cmake/CompilerWarnings.cmake)
-add_subdirectory(src) add_subdirectory(tests)
+enable_testing()
+add_test(NAME TachyonTests COMMAND tachyon_tests)

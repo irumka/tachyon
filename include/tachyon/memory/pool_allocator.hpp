@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <new>
+#include <stdexcept>
 
 namespace tachyon::memory {
 
@@ -13,6 +14,10 @@ private:
 
 public:
     PoolAllocator(size_t count, size_t chunk_size) {
+        if (count == 0 || chunk_size < sizeof(void*)) {
+            throw std::invalid_argument("PoolAllocator: count must be > 0 and chunk_size >= sizeof(void*)");
+        }
+
         mem_ptr = std::malloc(count * chunk_size);
         if (!mem_ptr) {
             throw std::bad_alloc();
@@ -46,19 +51,14 @@ public:
         }
 
         void* ptr = free_list_head;
-
         free_list_head = *reinterpret_cast<void**>(free_list_head);
-
         return ptr;
     }
 
     void deallocate(void* ptr) {
-        if (!ptr) {
-            throw std::bad_alloc();
-        }
+        if (!ptr) return;
 
         *reinterpret_cast<void**>(ptr) = free_list_head;
-
         free_list_head = ptr;
     }
 };
